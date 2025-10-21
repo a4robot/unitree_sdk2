@@ -204,7 +204,7 @@ std::string Custom::queryServiceName(std::string form,std::string name)
 void Custom::Start()
 {
     /*loop publishing thread*/
-    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, 2000, &Custom::LowCmdWrite, this);
+    lowCmdWriteThreadPtr = CreateRecurrentThreadEx("writebasiccmd", UT_CPU_ID_NONE, int(dt * 1000000), &Custom::LowCmdWrite, this);
 }
 
 void Custom::LowStateMessageHandler(const void* message)

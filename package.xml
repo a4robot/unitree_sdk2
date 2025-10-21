@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>unitree_sdk2</name>
+  <version>0.0.0</version>
+  <description>This repository for unitree robot model go2</description>
+
+  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+  <!-- Example:  -->
+  <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
+  <maintainer email="supasan.k@a4robotics.com">Supasan Komonlut</maintainer>
+
+  <license>unitree</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  
+  </export>
+</package>
