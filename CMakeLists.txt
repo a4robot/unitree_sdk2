@@ -19,6 +19,8 @@ find_package( catkin REQUIRED COMPONENTS
 # (Optional) Only if you actually need pthreads here
 find_package(Threads REQUIRED)
 
+find_package( a4_cpp_lib REQUIRED )
+
 include(GNUInstallDirs)
 
 # Put build outputs in standard bin/lib dirs (works fine in catkin devel too)
@@ -55,6 +57,7 @@ target_include_directories(unitree_sdk2 INTERFACE
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${a4_cpp_lib_INCLUDE_DIRS}
 )
 
 add_message_files(

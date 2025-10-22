@@ -233,10 +233,26 @@ void Custom::LowStateMessageHandler(const void* message)
 
 void Custom::LowCmdWrite()
 {
+    for( unsigned int idx = 0 ; idx < 12 ; idx++ )
+    {
+        switch (idx)
+        {
+        case 0:
+        case 3:
+        case 6:
+        case 9:
+            this->low_cmd_msg.motor_cmd[idx].q = -1 * low_state.motor_state()[idx].q();
+            break;
+        default:
+            this->low_cmd_msg.motor_cmd[idx].q = low_state.motor_state()[idx].q();
+            break;
+        }
+    }
+
     if(_percent_4<1)
     {
         std::cout<<"Read sensor data example: "<<std::endl;
-        std::cout<<"Joint 0 pos: "<<low_state.motor_state()[0].q()<<std::endl;
+        std::cout<<"Joint 0 pos: " << low_state.motor_state()[0].q()<<std::endl;
         std::cout<<"Imu accelerometer : "<<"x: "<<low_state.imu_state().accelerometer()[0]<<" y: "<<low_state.imu_state().accelerometer()[1]<<" z: "<<low_state.imu_state().accelerometer()[2]<<std::endl;
         std::cout<<"Foot force "<<low_state.foot_force()[0]<<std::endl;
         std::cout<<std::endl;
@@ -271,11 +287,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
-                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
-                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
-                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
-                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
-                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
+                // this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                // this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                // this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                // this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                // this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         
         }
@@ -291,11 +307,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
-                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
-                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
-                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
-                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
-                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
+                // this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                // this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                // this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                // this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                // this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         }
 
@@ -311,11 +327,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
-                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
-                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
-                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
-                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
-                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
+                // this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                // this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                // this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                // this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                // this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
             if(_percent_3<0.4)
             {
@@ -387,11 +403,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
 
-                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
-                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
-                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
-                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
-                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
+                // this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                // this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                // this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                // this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                // this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         }
         low_cmd.crc() = crc32_core((uint32_t *)&low_cmd, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
