@@ -8,7 +8,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ---- Catkin ----
-find_package(catkin REQUIRED)
+find_package( catkin REQUIRED COMPONENTS
+    message_generation
+    std_msgs
+    geometry_msgs
+    sensor_msgs
+)
 
 # (Optional) Only if you actually need pthreads here
 find_package(Threads REQUIRED)
@@ -47,11 +52,22 @@ target_include_directories(unitree_sdk2 INTERFACE
     $<INSTALL_INTERFACE:include>
 )
 
+add_message_files(
+	FILES
+	BMSCmd.msg
+	MotorCmd.msg
+	LowCmd.msg
+)
+
+generate_messages(
+	DEPENDENCIES std_msgs geometry_msgs sensor_msgs
+)
+
 # ---- Catkin export: expose include dir and link name (not the absolute path) ----
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES unitree_sdk2
-    # CATKIN_DEPENDS <add catkin deps here if any>
+    CATKIN_DEPENDS message_runtime std_msgs geometry_msgs
 )
 
 # ---- Headers install (catkin style) ----
