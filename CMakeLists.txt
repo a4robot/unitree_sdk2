@@ -70,3 +70,5 @@ if (BUILD_EXAMPLES)
   # Make sure your example targets link like this:
   # target_link_libraries(my_example PRIVATE unitree_sdk2 ${catkin_LIBRARIES})
 endif()
+
+add_subdirectory( a4_go2 )
