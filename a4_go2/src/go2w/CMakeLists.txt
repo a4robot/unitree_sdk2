@@ -1,2 +1,3 @@
 add_executable(go2w_stand_and_forward stand_and_forward.cpp)
-target_link_libraries(go2w_stand_and_forward unitree_sdk2)
+target_link_libraries(go2w_stand_and_forward unitree_sdk2 ${catkin_LIBRARIES})
+add_dependencies(go2w_stand_and_forward ${${PROJECT_NAME}_EXPORTED_TARGETS} )

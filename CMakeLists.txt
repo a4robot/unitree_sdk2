@@ -13,6 +13,7 @@ find_package( catkin REQUIRED COMPONENTS
     std_msgs
     geometry_msgs
     sensor_msgs
+    roscpp
 )
 
 # (Optional) Only if you actually need pthreads here
@@ -50,6 +51,10 @@ target_link_libraries(unitree_sdk2 INTERFACE ddsc ddscxx Threads::Threads)
 target_include_directories(unitree_sdk2 INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+)
+
+include_directories(
+  ${catkin_INCLUDE_DIRS}
 )
 
 add_message_files(

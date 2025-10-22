@@ -10,6 +10,8 @@
 #include <unitree/common/thread/thread.hpp>
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
 
+#include "unitree_sdk2/LowCmd.h"
+
 using namespace unitree::common;
 using namespace unitree::robot;
 using namespace unitree::robot::b2;
@@ -47,6 +49,7 @@ private:
 
     MotionSwitcherClient msc;
 
+    unitree_sdk2::LowCmd low_cmd_msg;
     unitree_go::msg::dds_::LowCmd_ low_cmd{};      // default init
     unitree_go::msg::dds_::LowState_ low_state{};  // default init
 
@@ -146,18 +149,28 @@ void Custom::Init()
 void Custom::InitLowCmd()
 {
     low_cmd.head()[0] = 0xFE;
+    this->low_cmd_msg.head[0] = 0xFE;
     low_cmd.head()[1] = 0xEF;
+    this->low_cmd_msg.head[1] = 0xEF;
     low_cmd.level_flag() = 0xFF;
+    this->low_cmd_msg.level_flag = 0xFF;
     low_cmd.gpio() = 0;
+    this->low_cmd_msg.gpio = 0;
 
     for(int i=0; i<20; i++)
     {
         low_cmd.motor_cmd()[i].mode() = (0x01);   // motor switch to servo (PMSM) mode
+        this->low_cmd_msg.motor_cmd[i].mode = (0x01);   // motor switch to servo (PMSM) mode
         low_cmd.motor_cmd()[i].q() = (PosStopF);
+        this->low_cmd_msg.motor_cmd[i].q = (PosStopF);
         low_cmd.motor_cmd()[i].kp() = (0);
+        this->low_cmd_msg.motor_cmd[i].kp = (0);
         low_cmd.motor_cmd()[i].dq() = (VelStopF);
+        this->low_cmd_msg.motor_cmd[i].dq = (VelStopF);
         low_cmd.motor_cmd()[i].kd() = (0);
+        this->low_cmd_msg.motor_cmd[i].kd = (0);
         low_cmd.motor_cmd()[i].tau() = (0);
+        this->low_cmd_msg.motor_cmd[i].tau = (0);
     }
 }
 
