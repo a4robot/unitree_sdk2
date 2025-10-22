@@ -10,6 +10,7 @@
 #include <unitree/common/thread/thread.hpp>
 #include <unitree/robot/b2/motion_switcher/motion_switcher_client.hpp>
 
+#include "ros/ros.h"
 #include "unitree_sdk2/LowCmd.h"
 
 using namespace unitree::common;
@@ -57,6 +58,8 @@ private:
     ChannelPublisherPtr<unitree_go::msg::dds_::LowCmd_> lowcmd_publisher;
     /*subscriber*/
     ChannelSubscriberPtr<unitree_go::msg::dds_::LowState_> lowstate_subscriber;
+
+    ros::Publisher lowcmd_ros_publisher;
 
     /*LowCmd write thread*/
     ThreadPtr lowCmdWriteThreadPtr;
@@ -123,6 +126,9 @@ void Custom::Init()
     /*create publisher*/
     lowcmd_publisher.reset(new ChannelPublisher<unitree_go::msg::dds_::LowCmd_>(TOPIC_LOWCMD));
     lowcmd_publisher->InitChannel();
+
+    ros::NodeHandle nh;
+    this->lowcmd_ros_publisher = nh.advertise< unitree_sdk2::LowCmd >( TOPIC_LOWCMD, 1 );
 
     /*create subscriber*/
     lowstate_subscriber.reset(new ChannelSubscriber<unitree_go::msg::dds_::LowState_>(TOPIC_LOWSTATE));
@@ -265,6 +271,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
+                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         
         }
@@ -280,6 +291,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
+                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         }
 
@@ -295,6 +311,11 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
+                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
             if(_percent_3<0.4)
             {
@@ -306,6 +327,12 @@ void Custom::LowCmdWrite()
 
                     low_cmd.motor_cmd()[j].kd() = Kd;
                     low_cmd.motor_cmd()[j].tau() = 0;
+
+                    this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                    this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                    this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                    this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                    this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
                 }
                             
             }
@@ -319,6 +346,12 @@ void Custom::LowCmdWrite()
 
                     low_cmd.motor_cmd()[j].kd() = Kd;
                     low_cmd.motor_cmd()[j].tau() = 0;
+
+                    this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                    this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                    this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                    this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                    this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
                 }
                             
             }
@@ -332,6 +365,12 @@ void Custom::LowCmdWrite()
 
                     low_cmd.motor_cmd()[j].kd() = Kd;
                     low_cmd.motor_cmd()[j].tau() = 0;
+
+                    this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                    this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                    this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                    this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                    this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
                 } 
             }
             
@@ -347,16 +386,23 @@ void Custom::LowCmdWrite()
                 low_cmd.motor_cmd()[j].kp() = Kp;
                 low_cmd.motor_cmd()[j].kd() = Kd;
                 low_cmd.motor_cmd()[j].tau() = 0;
+
+                this->low_cmd_msg.motor_cmd[j].q = low_cmd.motor_cmd()[j].q();
+                this->low_cmd_msg.motor_cmd[j].dq = low_cmd.motor_cmd()[j].dq();
+                this->low_cmd_msg.motor_cmd[j].kp = low_cmd.motor_cmd()[j].kp();
+                this->low_cmd_msg.motor_cmd[j].kd = low_cmd.motor_cmd()[j].kd();
+                this->low_cmd_msg.motor_cmd[j].tau = low_cmd.motor_cmd()[j].tau();
             }
         }
         low_cmd.crc() = crc32_core((uint32_t *)&low_cmd, (sizeof(unitree_go::msg::dds_::LowCmd_)>>2)-1);
     
         lowcmd_publisher->Write(low_cmd);
+        this->lowcmd_ros_publisher.publish( this->low_cmd_msg );
     }
    
 }
 
-int main(int argc, const char** argv)
+int main(int argc, char** argv)
 {
     if (argc < 2)
     {
@@ -368,13 +414,14 @@ int main(int argc, const char** argv)
             << "Press Enter to continue..." << std::endl;
     std::cin.ignore();
 
+    ros::init( argc, argv, "go2_stand_forward" );
     ChannelFactory::Instance()->Init(0, argv[1]);
 
     Custom custom;
     custom.Init();
     custom.Start();
   
-    while (1)
+    while (ros::ok())
     {
         sleep(10);
     }
