@@ -108,10 +108,10 @@ private:
         if( this->imu_active != 0 )
         {
             buffer4 = imu.quaternion();
-            msg_imu.orientation.x = buffer4[0];
-            msg_imu.orientation.y = buffer4[1];
-            msg_imu.orientation.z = buffer4[2];
-            msg_imu.orientation.w = buffer4[3];
+            msg_imu.orientation.w = buffer4[0];
+            msg_imu.orientation.x = buffer4[1];
+            msg_imu.orientation.y = buffer4[2];
+            msg_imu.orientation.z = buffer4[3];
 
             buffer3 = imu.gyroscope();
             msg_imu.angular_velocity.x = buffer3[0];
