@@ -63,8 +63,11 @@ include_directories(
 add_message_files(
 	FILES
 	BMSCmd.msg
+  BMSState.msg
 	MotorCmd.msg
 	LowCmd.msg
+  MotorState.msg
+  MotorStates.msg
 )
 
 generate_messages(
