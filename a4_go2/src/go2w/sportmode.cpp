@@ -133,7 +133,7 @@ public:
 
         while( ros::ok() )
         {
-            sleep( 1.0 );
+            sleep( 0.1 );
             rate.sleep();
             ros::spinOnce();
             ros::Time stamp = ros::Time::now();
