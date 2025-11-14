@@ -14,6 +14,7 @@ find_package( catkin REQUIRED COMPONENTS
     geometry_msgs
     sensor_msgs
     roscpp
+    tf
 )
 
 # (Optional) Only if you actually need pthreads here
