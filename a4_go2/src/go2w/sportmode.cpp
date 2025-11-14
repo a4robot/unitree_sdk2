@@ -127,12 +127,13 @@ public:
     int main()
     {
 
-        ros::Rate rate(1);
+        ros::Rate rate(5);
 
         this->mode_client_expect = SportClientState::INIT;
 
         while( ros::ok() )
         {
+            sleep( 1.0 );
             rate.sleep();
             ros::spinOnce();
             ros::Time stamp = ros::Time::now();
@@ -141,9 +142,11 @@ public:
             {
                 ;
             }
-            else if( (stamp - this->cmd_stamp).toSec() > 30 )
+            else if( (stamp - this->cmd_stamp).toSec() > 10 )
             {
                 this->mode_client_expect = SportClientState::STAND_DOWN;
+                // int _res = this->sport_client->SwitchJoystick( true );
+                // ROS_INFO( "Result set switch joy stick %d", _res );
             }
             else
             {
@@ -201,7 +204,8 @@ public:
                     }
                     else if( this->mode_client_expect == SportClientState::DAMP )
                     {
-                        state_code = this->sport_client->Damp();
+                        // state_code = this->sport_client->Damp();
+                        state_code = this->sport_client->StandDown();
                         if( state_code == 0 ) this->mode_client = this->mode_client_expect;
                         else
                         {
@@ -212,7 +216,22 @@ public:
                     }
                     else if( this->mode_client_expect == SportClientState::MOVE )
                     {
-                        this->mode_client = this->mode_client_expect;
+                        if( this->mode_client != this->mode_client_expect )
+                        {
+                            // state_code = this->sport_client->SwitchJoystick( true );
+                            state_code = 0;
+                            if( state_code == 0 ) this->mode_client = this->mode_client_expect;
+                            else
+                            {
+                                // update_state = false;
+                                // ROS_FATAL( "Failure to command %s code %d", SportClientState::to_string( this->mode_client_expect ).c_str(), state_code );
+                                // this->mode_stamp = stamp - ros::Duration( 10 );
+                            }
+                        }
+                        else
+                        {
+                            ;
+                        }
                     }
                     else if( this->mode_client_expect == SportClientState::STAND_DOWN )
                     {
@@ -225,7 +244,7 @@ public:
                             this->mode_stamp = stamp - ros::Duration( 10 );
                         }
                     }
-                    else if( this->mode_client_expect == SportClientState::STAND_DOWN )
+                    else if( this->mode_client_expect == SportClientState::STAND_UP )
                     {
                         state_code = this->sport_client->StandUp();
                         if( state_code == 0 ) this->mode_client = this->mode_client_expect;
@@ -287,6 +306,7 @@ protected:
     ros::Publisher odom_publisher;
 
     ros::Time cmd_stamp;
+    geometry_msgs::Twist feedback_msg;
     ros::Subscriber cmd_subscriber;
     ros::Publisher cmd_feedback_publisher;
 
@@ -298,14 +318,14 @@ private:
     void cmd_vel_callback( const geometry_msgs::TwistConstPtr& ptr_msg )
     {
         this->cmd_stamp = ros::Time::now();
-        geometry_msgs::Twist feedback_msg = *ptr_msg;
+        this->feedback_msg = *ptr_msg;
 
         if( this->mode_client == SportClientState::MOVE )
         {
             if( 
-                std::fabs( feedback_msg.linear.x ) < 1e-4 && 
-                std::fabs( feedback_msg.linear.y ) < 1e-4 &&
-                std::fabs( feedback_msg.angular.z ) < 1e-4
+                std::fabs( this->feedback_msg.linear.x ) < 1e-4 && 
+                std::fabs( this->feedback_msg.linear.y ) < 1e-4 &&
+                std::fabs( this->feedback_msg.angular.z ) < 1e-4
             )
             {
                 if( this->sport_client->StopMove() != 0 )
@@ -319,10 +339,15 @@ private:
             }
             else
             {
-                this->sport_client->Move( 
-                    feedback_msg.linear.x,
-                    feedback_msg.linear.y,
-                    feedback_msg.angular.z
+                int _res = this->sport_client->Move( 
+                    this->feedback_msg.linear.x,
+                    this->feedback_msg.linear.y,
+                    this->feedback_msg.angular.z
+                );
+                ROS_INFO(
+                    "Move command %.2f %.2f %.2f -> _res %d", 
+                    this->feedback_msg.linear.x, this->feedback_msg.linear.y, this->feedback_msg.angular.z,
+                    _res
                 );
             }
         }
@@ -407,4 +432,8 @@ private:
 int main( int argc, char** argv )
 {
     ros::init( argc, argv, "unitree_sportmodestate" );
+
+    UnitreeGO2WSportMode node;
+    node.init( argc, argv );
+    node.main();
 }

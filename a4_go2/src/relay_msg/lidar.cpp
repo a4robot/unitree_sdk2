@@ -37,6 +37,8 @@ void Handler( const void* message )
     }
     ros_msg.header.stamp = ros::Time::now();
 
+    ros_msg.data = cloud_msg->data();
+
     ROS_INFO_THROTTLE( 1, "Publish point cloud to %s points %u", publisher.getTopic().c_str(), ros_msg.height * ros_msg.width );
     publisher.publish( ros_msg );
 }

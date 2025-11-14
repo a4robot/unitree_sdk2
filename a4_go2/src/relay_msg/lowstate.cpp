@@ -105,6 +105,7 @@ private:
         const unitree_go::msg::dds_::IMUState_ &imu = state.imu_state();
 
         sensor_msgs::Imu msg_imu;
+        msg_imu.header.stamp = ros::Time::now();
         if( this->imu_active != 0 )
         {
             buffer4 = imu.quaternion();

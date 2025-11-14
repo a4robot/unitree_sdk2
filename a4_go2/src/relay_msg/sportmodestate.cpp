@@ -144,4 +144,8 @@ private:
 int main( int argc, char** argv )
 {
     ros::init( argc, argv, "unitree_sportmodestate" );
+
+    UnitreeSportModeState node;
+    node.init( argc, argv );
+    node.main();
 }
