@@ -7,6 +7,27 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if(NOT WIN32)
+  string(ASCII 27 Esc)
+  set(ColourReset "${Esc}[m")
+  set(ColourBold  "${Esc}[1m")
+  set(Red         "${Esc}[31m")
+  set(Green       "${Esc}[32m")
+  set(Yellow      "${Esc}[33m")
+  set(Blue        "${Esc}[34m")
+  set(Magenta     "${Esc}[35m")
+  set(Cyan        "${Esc}[36m")
+  set(White       "${Esc}[37m")
+  set(BoldRed     "${Esc}[1;31m")
+  set(BoldGreen   "${Esc}[1;32m")
+  set(BoldYellow  "${Esc}[1;33m")
+  set(BoldBlue    "${Esc}[1;34m")
+  set(BoldMagenta "${Esc}[1;35m")
+  set(BoldCyan    "${Esc}[1;36m")
+  set(BoldWhite   "${Esc}[1;37m")
+endif()
+
+
 # ---- Catkin ----
 find_package( catkin REQUIRED COMPONENTS
     message_generation
@@ -23,6 +44,31 @@ find_package(Threads REQUIRED)
 find_package( a4_cpp_lib REQUIRED )
 
 include(GNUInstallDirs)
+
+# Part camera opencv image
+set(OPENCV_LIB_FOLDER "$ENV{OPENCV_LIB_FOLDER}/build/install/lib/cmake/opencv4")
+set(OpenCV_LIB_DIRS "${OPENCV_LIB_FOLDER}/../../")
+find_package( OpenCV 4 REQUIRED PATHS ${OPENCV_LIB_FOLDER} NO_DEFAULT_PATH)
+set(OPENCV_FULL_PATH_LIBS)
+foreach(lib ${OpenCV_LIBS})
+  # This will look for libopencv_<xxx>.so under ${OpenCV_LIB_DIRS}
+  find_library(_found_${lib}
+               NAMES        ${lib}
+               PATHS        ${OpenCV_LIB_DIRS}
+               NO_DEFAULT_PATH)
+  if(NOT _found_${lib})
+    message(FATAL_ERROR "Couldn’t locate ${lib} in ${OpenCV_LIB_DIRS}")
+  endif()
+  list(APPEND OPENCV_FULL_PATH_LIBS ${_found_${lib}})
+endforeach()
+
+message(STATUS "${BoldGreen}OpenCV_INCLUDE_DIRS : ${OpenCV_INCLUDE_DIRS}${ColourReset}")
+message(STATUS "${BoldGreen}OpenCV_LIB_DIRS: ${OpenCV_LIB_DIRS}${ColourReset}")
+message(STATUS "${BoldGreen}OpenCV_LIBS : ${OpenCV_LIBS}${ColourReset}")
+message(STATUS "${BoldGreen}OPENCV_FULL_PATH_LIBS : ${OPENCV_FULL_PATH_LIBS}${ColourReset}")
+
+set(CV_BRIDGE_LIB_FOLDER "$ENV{CV_BRIDGE_CMAKE_FOLDER}") # path to cv_bridgeConfig.cmake
+find_package( cv_bridge REQUIRED PATHS ${CV_BRIDGE_LIB_FOLDER} NO_DEFAULT_PATH)
 
 # Put build outputs in standard bin/lib dirs (works fine in catkin devel too)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
